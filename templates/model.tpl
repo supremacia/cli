@@ -5,14 +5,14 @@
  * @copyright   copiright
  * @license     MIT
  * @author      your name - your@mail.com
- * @version     0.0.1
- * @package     Lib
+ * @version     0.1.7
+ * @package     Limp
  * @access      public
  * @since       0.0.1
  */
 
 namespace %namespace%;
-use Lib\App;
+use Limp\App;
 
 class %name% {
 

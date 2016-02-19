@@ -6,7 +6,7 @@
         <meta name="description" content="Security Chat Relay">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="keywords" content="">
-        <meta property="og:title" content="Zumbi">
+        <meta property="og:title" content="My Web Site">
         <meta property="og:type" content="website">
         <meta property="og:url" content="<x:url/>">
         <meta property="og:image" content="<x:url/>img/site.jpg">

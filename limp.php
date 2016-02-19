@@ -2,11 +2,8 @@
 echo 'Always remember: less is more in PHP!';
 if (php_sapi_name() !== 'cli') exit('It\'s no cli!');
 
-include dirname(dirname(__DIR__)).'/limp';
-
 //Constants:
-defined('¢WWW') || define('¢WWW', str_replace('\\', '/', dirname(__DIR__)).'/');
-define('CLI_PATH', ¢APP.'lib/cli/');
+define('CLI_PATH', __DIR__.'/');
 define('CONFIG_KEYS_PATH', ¢CONFIG.'keys/');
 define('TIMEON', microtime(true));
 
@@ -19,7 +16,8 @@ exit("\n  Finished in ".number_format((microtime(true)-TIMEON)*1000,3)." ms.\n")
 
 // FUNCTIONS --------------------------------------------------------------------
 
-function request($rqst){
+function request($rqst)
+{
     array_shift($rqst);
     $ax = $rqst;
     foreach($rqst as $a){
@@ -33,7 +31,8 @@ function request($rqst){
     return _help();
 }
 
-function _key($v, $arg){
+function _key($v, $arg)
+{
     echo '  key: '.$v;
 
     if(count($arg) > 0) {
@@ -56,8 +55,8 @@ function _key($v, $arg){
         //Now, OPEN_SSL
         include CLI_PATH.'open.php';
 
-        return "\n\n  OpenSSL keys & certificates - success!";
-
+        echo   "\n  OpenSSL keys & certificates - success!";
+        return "\n  Location: ".CONFIG_KEYS_PATH."\n\n";
     }
 
     elseif($v == 'list'){
@@ -70,61 +69,31 @@ function _key($v, $arg){
     else return "\n\n  ----- ERROR: Command 'key:$v' not found!\n"._help();
 }
 
-function _make($v, $arg){
+function _make($v, $arg)
+{
     echo '  make: '.$v;
 
     if(isset($arg[0])) $arg[0] = str_replace('\\', '/', $arg[0]);
+    else return "\n\n  ERROR: indique o NOME do arquivo!\n";
 
-    if(strtolower($v) == 'controller'){
-        if(!isset($arg[0]))
-            return "\n\n  ERROR: indique o NOME do arquivo!\n";
+    $type = strtolower(trim($v));
 
-        return createFile($arg[0], 'controller');
+    if($type != 'controller' && $type != 'model' && $type != 'html'){
+        return "\n\n  ----- ERROR: Command 'make:$v' not found!\n"._help();
     }
 
-    elseif(strtolower($v) == 'model'){
-        if(!isset($arg[0]))
-            return "\n\n  ERROR: indique o NOME do arquivo!\n";
-
-        return createFile($arg[0], 'model');
-    }
-
-    elseif(strtolower($v) == 'lib'){
-        if(!isset($arg[0]))
-            return "\n\n  ERROR: indique o NOME do arquivo!\n";
-
-        return createFile($arg[0], 'lib');
-    }
-
-    elseif(strtolower($v) == 'html'){
-        if(!isset($arg[0]))
-            return "\n\n  ERROR: indique o NOME do arquivo!\n";
-        $name = strtolower($arg[0]);
-
-        if(file_exists(¢APP.'html/'.$name.'.html'))
-            return "\n\n  WARNNING: this file already exists!\n  ".¢APP.'html/'.$name.".html\n\n";
-
-        if(!checkAndOrCreateDir(dirname(¢APP.'html/'.$name.'.html'),true))
-            return "\n\n  WARNNING: access denied in directory '".dirname(¢APP.'html/'.$name.'.html')."'\n\n";
-
-        $ctrl = file_get_contents(¢CONFIG.'templates/html.tpl');
-
-        $ctrl = str_replace('%name%', ucfirst($name), $ctrl);
-        file_put_contents(¢APP.'html/'.$name.'.html', $ctrl);
-
-        return "\n\n  HTML file '".¢APP.'html/'.$name.'.html'."' criado com sucesso!\n\n";
-    }
-
-    else return "\n\n  ----- ERROR: Command 'make:$v' not found!\n"._help();
+    return createFile($arg[0], $type);
 }
 
-function _optimize($v, $arg){
+function _optimize($v, $arg)
+{
+    //TODO : optimize!
     echo "\n  >> Optimized - success!\n";
 }
 
 // Checa um diretório e cria se não existe - retorna false se não conseguir ou não existir
-function checkAndOrCreateDir($dir, $create = false, $perm = '0777'){
-
+function checkAndOrCreateDir($dir, $create = false, $perm = '0777')
+{
     if(is_dir($dir) && is_writable($dir)) return true;
     elseif($create === false) return false;
 
@@ -136,38 +105,40 @@ function checkAndOrCreateDir($dir, $create = false, $perm = '0777'){
 }
 
 // create file (controller/model/library)
-function createFile($name, $type = 'controller'){
+function createFile($name, $type = 'controller')
+{
     $name = strtolower($name);
     $path = ¢APP.$type.'/';
+    $ext = $name == 'html'?'.html':'.php';
 
-    if(file_exists($path.$name.'.php'))
-        return "\n\n  WARNNING: this file already exists!\n  ".$path.$name.".php\n\n";
+    if(file_exists($path.$name.$ext))
+        return "\n\n  WARNNING: this file already exists!\n  ".$path.$name.$ext."\n\n";
 
-    if(!checkAndOrCreateDir(dirname($path.$name.'.php'),true))
-        return "\n\n  WARNNING: access denied in directory '".dirname($path.$name.'.php')."'\n\n";
+    if(!checkAndOrCreateDir(dirname($path.$name.$ext),true))
+        return "\n\n  WARNNING: access denied in directory '".dirname($path.$name.$ext)."'\n\n";
 
     //get template
-    $ctrl = file_get_contents(¢CONFIG.'templates/'.$type.'.tpl');
+    $file = file_get_contents(CLI_PATH.'templates/'.$type.'.tpl');
 
     //replace %namespace% and %name%
-    $ctrl = str_replace('%name%', ucfirst(basename($name)), $ctrl);
+    $file = str_replace('%name%', ucfirst(basename($name)), $file);
     $namespace = ucfirst($type).'\\';
     foreach(explode('/', dirname($name)) as $namespc){
         if($namespc == '.') break;
         $namespace .= ucfirst($namespc).'\\';
     }
-    $ctrl = str_replace('%namespace%', trim($namespace, '\\'), $ctrl);
+    $file = str_replace('%namespace%', trim($namespace, '\\'), $file);
 
     //saving the file
-    $ok = file_put_contents($path.$name.'.php', $ctrl);
+    $ok = file_put_contents($path.$name.$ext, $file);
 
     if($ok) return "\n\n  Arquivo '".$path.$name."' criado com sucesso!\n\n";
     else return "\n\n  Não foi possível criar '".$path.$name."'!\n\n";
 }
 
-
 //Help display
-function _help(){
+function _help()
+{
     return '
   Usage: php <path/to/.app/>limp [command:type] [options]
 
@@ -177,11 +148,10 @@ function _help(){
 
   make:controller <name>    Create a controller with <name>
   make:model <name>         Create a model with <name>
-  make:lib <name>           Create a library with <name>
-  make:html <name>           Create a html file with <name>
+  make:html <name>          Create a html file with <name>
 
   optimize                  Optimize entire Limp application
 
-  -h or ?                    Show this help
+  -h or ?                   Show this help
   ';
 }
