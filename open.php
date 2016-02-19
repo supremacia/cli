@@ -47,8 +47,6 @@ file_put_contents($fnpublic, openssl_pkey_get_details($privkey)['key']);
 /**
  * @todo Criar rotinas de interceptação de erros
  *
- */
-// Show any errors that occurred here
-//while (($e = openssl_error_string()) !== false) {
-//    echo "\n".$e."\n";
-//}
+ *  while (($e = openssl_error_string()) !== false) {
+ *      echo "\n".$e."\n";
+ *  }
