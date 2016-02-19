@@ -50,3 +50,4 @@ file_put_contents($fnpublic, openssl_pkey_get_details($privkey)['key']);
  *  while (($e = openssl_error_string()) !== false) {
  *      echo "\n".$e."\n";
  *  }
+ */ 
