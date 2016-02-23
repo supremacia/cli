@@ -16,7 +16,8 @@
         "exclude": ["/doc", "/*.json", "/.git", "/*.md"]
     },
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "limp/data": "~0.0.1"
     },
     "require-dev": {
     },

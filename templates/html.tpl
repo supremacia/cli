@@ -12,7 +12,7 @@
         <meta property="og:image" content="<x:url/>img/site.jpg">
         <meta property="og:site_name" content="Site name">
         <meta property="og:description" content="Site content">
-        <link rel="shortcut icon" href="<x:¢URL/>favicon.ico">
+        <link rel="shortcut icon" href="<x:_URL/>favicon.ico">
         <x:style/>
         <link rel="author" href="humans.txt">
     </head>

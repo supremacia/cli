@@ -12,12 +12,15 @@
  */
 
 namespace %namespace%;
-use  Controller\AppController;
+
+use  Controller\App\Base;
 use Limp\App;
 
-class %name% extends AppController {
+class %name% extends Base 
+{
 
-    function __construct(){
+    function __construct()
+    {
         #code here...
     }
 

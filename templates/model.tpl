@@ -12,11 +12,15 @@
  */
 
 namespace %namespace%;
+
+use Model\App\Base;
 use Limp\App;
 
-class %name% {
+class %name% extends Base
+{
 
-    function __construct(){
+    function __construct()
+    {
         #code here...
     }
 
