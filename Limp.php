@@ -131,7 +131,7 @@ class Limp
     function createFile($name, $type = 'controller')
     {
         $name = $type == 'html'?strtolower($name):$name;
-        $path = _APP.$type.'/';
+        $path = _APP.ucfirst($type).'/';
         $ext = $type == 'html'?'.html':'.php';
 
         if(file_exists($path.$name.$ext))
