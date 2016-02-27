@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Limp - less is more in PHP
  * @copyright   Bill Rocha - http://plus.google.com/+BillRocha
