@@ -25,7 +25,7 @@ class Limp
 
     function __construct($argv)
     {
-        echo ':: Always remember: less is more in PHP!';
+        echo ' Less is more in PHP!';
         if (php_sapi_name() !== 'cli') exit('It\'s no cli!');
 
         //Constants:
