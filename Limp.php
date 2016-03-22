@@ -25,7 +25,7 @@ class Limp
 
     function __construct($argv)
     {
-        echo ':: Always remember: less is more in PHP!';
+        echo ' Less is more in PHP!';
         if (php_sapi_name() !== 'cli') exit('It\'s no cli!');
 
         //Constants:
@@ -50,6 +50,12 @@ class Limp
             if(strpos($a, 'optimize') !== false) return $this->cmdOptimize(substr($a, 8), $ax);
             if(strpos($a, 'key:') !== false) return $this->cmdKey(substr($a, 4), $ax);
             if(strpos($a, 'make:') !== false) return $this->cmdMake(substr($a, 5), $ax);
+
+            //Plugins
+            if(strpos($a, 'table:') !== false) {
+                $plugin = new Plugin\Table(substr($a, 6), $ax);
+                return $plugin->run();
+            }
         }
         //or show help...
         return $this->help();

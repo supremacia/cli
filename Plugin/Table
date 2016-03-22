@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * Limp - less is more in PHP
+ * @copyright   Bill Rocha - http://plus.google.com/+BillRocha
+ * @license     MIT
+ * @author      Bill Rocha - prbr@ymail.com
+ * @version     0.2.1
+ * @package     Limp
+ * @access      public
+ * @since       0.3.0
+ *
+ */
+
+namespace Limp\Cli;
+
+use Limp\Data;
+
+class Limp 
+{
+
+    private $configKeysPath = null;
+    private $cliPath = null;
+    private $timer = 0;
+
+    function __construct($argv)
+    {
